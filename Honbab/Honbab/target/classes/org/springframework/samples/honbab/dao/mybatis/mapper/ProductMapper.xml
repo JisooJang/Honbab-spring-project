@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.springframework.samples.honbab.dao.mybatis.mapper.ProductMapper">
+
+  <cache />
+
+<select id="getProduct" parameterType="String" resultType="Product">
+    SELECT
+      PRODUCTID,
+      NAME,
+      DESCN as description,
+      CATEGORY as categoryId
+    FROM PRODUCT
+    WHERE PRODUCTID = #{productId}
+  </select>
+ <update id="updateImageOfRestr" parameterType="Product">
+    UPDATE RESTAURANT SET
+      REST_THUMBNAIL = #{rest_thumbnail}
+    WHERE REST_ID = #{rest_id}
+  </update>
+  
+  <update id="updateRestr" parameterType="Product">
+    UPDATE RESTAURANT SET
+      REST_NAME = #{rest_name},
+      REST_ADDR = #{rest_addr},
+      REST_PHONE = #{rest_phone},
+      REST_TIME = #{rest_time},
+      REST_SEAT = #{rest_seat},
+      REST_THUMBNAIL = #{rest_thumbmail},
+      REST_ACCOUNT = #{rest_account},
+      REST_BANKCODE = #{rest_bankcode},
+      REST_CTG = #{rest_ctg}
+    WHERE REST_ID = #{rest_id}
+  </update>
+
+<select id="searchPopularList" resultType ="Product">
+  
+   select 
+     REST_ID,REST_THUMBNAIL
+   from (select * from restaurant order by rest_reser_count desc) 
+   <![CDATA[
+   WHERE ROWNUM <= 3
+   ]]>
+  </select>
+
+  <select id="getRestr" parameterType="int" resultType="Product">
+    select
+      REST_ID,
+      REST_NAME,
+      REST_ADDR,
+      REST_PHONE,
+      REST_TIME,
+      REST_SEAT,
+      REST_RESER_COUNT,
+      REST_THUMBNAIL,
+      REST_ACCOUNT,
+      REST_BANKCODE,
+      REST_STAR,
+      REST_CTG
+    from RESTAURANT
+    where rest_id = #{rest_id}
+  </select>
+
+  <select id="searchProductList" resultType="Product">
+    select
+      REST_ID,
+      REST_NAME,
+      REST_ADDR,
+      REST_PHONE,
+      REST_TIME,
+      REST_SEAT,
+      REST_RESER_COUNT,
+      REST_THUMBNAIL,
+      REST_ACCOUNT,
+      REST_BANKCODE,
+      REST_STAR,
+      REST_CTG
+    from RESTAURANT
+    WHERE lower(REST_NAME) like #{value}
+  </select>
+  
+  <select id="getProductListByCategory" resultType="Product">
+    select
+      REST_ID,
+      REST_NAME,
+      REST_ADDR,
+      REST_PHONE,
+      REST_TIME,
+      REST_SEAT,
+      REST_RESER_COUNT,
+      REST_THUMBNAIL,
+      REST_ACCOUNT,
+      REST_BANKCODE,
+      REST_STAR,
+      REST_CTG
+    from RESTAURANT
+    WHERE 1=1
+    <if test="categoryId != '' and categoryId != null">
+         AND lower(REST_NAME) like '#{categoryId}%'
+    </if>
+    
+	    <if test="restrctg != 0 and restrctg != null">
+	         AND rest_ctg = #{restrctg}
+	    </if>
+	    <if test="area == 1">
+	         AND rest_addr like '서울%'
+	    </if>
+	    <if test="area == 2">
+	         AND rest_addr like '경기%'
+	    </if>
+	    <if test="area == 3">
+	         AND rest_addr like '인천%'
+	    </if>
+	    <if test="area == 4">
+	         AND rest_addr like '부산%'
+	    </if>
+	    <if test="area == 5">
+	         AND rest_addr like '대구%'
+	    </if>
+	    <if test="area == 6">
+	         AND rest_addr like '강원%'
+	    </if>
+	    <if test="area == 7">
+	         AND rest_addr like '경남%'
+	    </if>
+	    <if test="area == 8">
+	         AND rest_addr like '제주%'
+	    </if>
+  </select>
+  
+  
+<update id="updateStar"> UPDATE RESTAURANT SET rest_star = #{param1} WHERE rest_id = #{param2} </update>
+
+<!-- #{address2,jdbcType=VARCHAR} -->
+  <insert id="insertRestr" parameterType="Product">
+     <selectKey keyProperty="rest_id" resultType="int" order="BEFORE" >
+        SELECT Restr_seq.nextval AS rest_id FROM DUAL
+     </selectKey> 
+    INSERT INTO RESTAURANT
+      (REST_ID, REST_NAME, REST_ADDR, REST_TIME, REST_SEAT, REST_RESER_COUNT ,REST_ACCOUNT, REST_BANKCODE, REST_CTG)
+    VALUES
+      (#{rest_id} ,#{rest_name}, #{rest_addr}, #{rest_time}, #{rest_seat}, #{rest_reser_count} ,#{rest_account}, #{rest_bankcode}, #{rest_ctg})
+  </insert>
+
+</mapper>

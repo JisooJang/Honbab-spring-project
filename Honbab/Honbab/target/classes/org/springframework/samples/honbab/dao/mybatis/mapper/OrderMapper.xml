@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.springframework.samples.honbab.dao.mybatis.mapper.OrderMapper">
+
+	<resultMap id="MenuMap" type="Menu">
+	<result property="menu_id" column="MENU_ID" jdbcType="NUMERIC"/>
+    <result property="rest_id" column="REST_ID" jdbcType="NUMERIC"/>
+    <result property="price" column="PRICE" jdbcType="NUMERIC" />   
+	</resultMap>
+	
+	<resultMap id="OrderMap" type="Order">
+	<result property="ticket_id" column="TICKET_ID" jdbcType="NUMERIC"/>
+	<result property="rest_id" column="REST_ID" jdbcType="NUMERIC"/>
+	<result property="sum" column="SUM" jdbcType="NUMERIC"/>
+	<result property="menu_id" column="MENU_ID" jdbcType="NUMERIC"/>
+    <result property="quantity" column="QUANTITY" jdbcType="NUMERIC" />   
+	</resultMap>
+	
+	
+	<select id="getMenuByRestr" parameterType="int" resultMap="MenuMap" 
+	resultType="Menu">
+	SELECT menu_id, rest_id, menu_name, price, menu_image  
+	FROM MENU
+	WHERE REST_ID = #{rest_id}
+	</select>
+	
+	<select id="getMenu" parameterType="int" resultMap="MenuMap" 
+	resultType="Menu">
+	SELECT menu_id, rest_id, menu_name, price, menu_image  
+	FROM MENU
+	WHERE MENU_ID = #{menu_id}
+	</select>
+	
+	
+	<select id="get_ticket_list" parameterType="String" resultMap="OrderMap"
+	resultType="Order">
+	SELECT ticket_id, rest_id, user_id, sum, card_number, menu_id, quantity
+	FROM TICKET
+	WHERE USER_ID = #{user_id}
+	ORDER BY rest_id
+	</select>
+	
+	<select id="getOrder" parameterType="int" resultMap="OrderMap"
+	resultType="Order">
+	SELECT ticket_id, rest_id, user_id, sum, card_number, menu_id, quantity
+	FROM TICKET
+	WHERE TICKET_ID = #{ticket_id}
+	ORDER BY rest_id
+	</select>
+	
+	<insert id="insertOrder" parameterType="Order">
+	INSERT INTO TICKET (TICKET_ID, REST_ID, USER_ID, SUM, CARD_NUMBER, MENU_ID, QUANTITY)
+	VALUES (TICKET_SEQ.nextval, #{rest_id}, #{user_id}, #{sum},
+	 #{card_number}, #{menu_id}, #{quantity})
+	</insert>
+	
+	<delete id="cancelOrder" parameterType="int">
+	DELETE FROM TICKET
+	WHERE TICKET_ID = #{ticket_id}
+	</delete>
+
+</mapper>

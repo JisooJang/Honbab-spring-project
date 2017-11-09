@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.springframework.samples.honbab.dao.mybatis.mapper.MenuMapper">
+
+  <cache />
+
+  <insert id="insertMenu" parameterType="Menu">
+ 
+ 	<!--  <selectKey keyProperty="menu_id, rest_id" resultType="hashmap" order="BEFORE" >
+        SELECT Menu_seq.nextval AS menu_id,Restr_seq.currval AS rest_id  FROM DUAL
+     </selectKey>
+  -->
+  	 <selectKey keyProperty="menu_id" resultType="int" order="BEFORE" >
+        SELECT Menu_seq.nextval AS menu_id FROM DUAL
+     </selectKey>
+    INSERT INTO Menu
+      (MENU_ID, REST_ID, MENU_NAME, PRICE)
+    VALUES
+      (#{menu_id} ,#{rest_id}, #{menu_name}, 3000)
+  </insert>
+<select id="getMenuList" resultType="Menu">
+    SELECT
+     MENU_ID,
+     REST_ID,
+     MENU_NAME,
+     PRICE,
+     MENU_IMAGE
+    FROM MENU
+    WHERE REST_ID = #{rest_id}
+      
+  </select>
+
+  
+<update id="insertImageOfMenu" parameterType="Menu">
+    UPDATE Menu SET
+      MENU_IMAGE = #{menu_image}
+    WHERE MENU_ID = #{menu_id}
+  </update>
+
+<update id="updateMenu" parameterType="Menu">
+    UPDATE Menu SET
+      MENU_NAME = #{menu_name},
+      PRICE = #{price},
+      MENU_IMAGE = #{menu_image}
+    WHERE MENU_ID = #{menu_id}
+  </update>
+  
+  
+</mapper>

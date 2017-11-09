@@ -1,0 +1,4 @@
+#Tomcat publish data
+#Wed Jun 21 09:09:38 KST 2017
+org.eclipse.jst.jee.server\:/binary\:C\:\\Users\\jiyoung\\.m2\\repository\\org\\springframework\\spring-web\\4.3.7.RELEASE\\spring-web-4.3.7.RELEASE.jar=C\:\\Users\\jiyoung\\Downloads\\sts-bundle\\pivotal-tc-server-developer-3.2.4.SR1\\base-instance\\wtpwebapps\\Honbab\\WEB-INF\\lib\\spring-web-4.3.7.RELEASE.jar
+org.eclipse.jst.jee.server\:Honbab=C\:\\Users\\jiyoung\\Downloads\\sts-bundle\\pivotal-tc-server-developer-3.2.4.SR1\\base-instance\\wtpwebapps\\Honbab

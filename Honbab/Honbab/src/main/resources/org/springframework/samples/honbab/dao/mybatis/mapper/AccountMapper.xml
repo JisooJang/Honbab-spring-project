@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+       Copyright 2010-2013 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.springframework.samples.honbab.dao.mybatis.mapper.AccountMapper">
+
+  <cache />
+
+  <select id="getAccountByUserID" resultType="Account">
+    SELECT
+      ACCOUNT.USER_ID,
+      ACCOUNT.EMAIL,
+      ACCOUNT.NAME,
+      ACCOUNT.GENDER,
+      ACCOUNT.ADDRESS,
+      ACCOUNT.FAVORITE,
+      ACCOUNT.PHONE,
+      ACCOUNT.PROFILE,
+      ACCOUNT.TYPE,
+      ACCOUNT.REST_ID
+    FROM ACCOUNT
+    WHERE ACCOUNT.USER_ID = #{user_id}
+      
+  </select>
+
+  <select id="getAccountByUsernameAndPassword" resultType="Account">
+    SELECT
+      ACCOUNT.USER_ID AS user_id,
+      ACCOUNT.EMAIL AS email,
+      ACCOUNT.NAME,
+      ACCOUNT.GENDER,
+      ACCOUNT.ADDRESS,
+      ACCOUNT.FAVORITE,
+      ACCOUNT.PHONE,
+      ACCOUNT.PROFILE,
+      ACCOUNT.TYPE,
+      ACCOUNT.REST_ID
+     <!--  ACCOUNT.FIRSTNAME,
+      ACCOUNT.LASTNAME,
+      ACCOUNT.STATUS,
+      ACCOUNT.ADDR1 AS address1,
+      ACCOUNT.ADDR2 AS address2,
+      ACCOUNT.CITY,
+      ACCOUNT.STATE,
+      ACCOUNT.ZIP,
+      ACCOUNT.COUNTRY,
+      ACCOUNT.PHONE,
+      PROFILE.LANGPREF AS languagePreference,
+      PROFILE.FAVCATEGORY AS favouriteCategoryId,
+      PROFILE.MYLISTOPT AS listOption,
+      PROFILE.BANNEROPT AS bannerOption,
+      BANNERDATA.BANNERNAME -->
+    FROM ACCOUNT
+    WHERE ACCOUNT.USER_ID = #{param1}
+      AND ACCOUNT.PASSWORD = #{param2}
+    
+   
+  </select>
+
+  <select id="getUsernameList" resultType="java.lang.String">
+    SELECT USERNAME AS VALUE FROM SIGNON
+  </select>
+
+  <update id="updateAccount" parameterType="Account">
+    UPDATE ACCOUNT SET
+      EMAIL = #{email},
+      PASSWORD = #{password},
+      NAME = #{name},
+      GENDER = #{gender},
+      ADDRESS = #{address},
+      PHONE = #{phone},
+      PROFILE = #{profile},
+      TYPE = #{type}
+    WHERE USER_ID = #{user_id}
+  </update>
+
+<!-- #{address2,jdbcType=VARCHAR} -->
+  <insert id="insertAccount" parameterType="Account">
+  	<!-- <selectKey keyProperty="user_id" resultType="int" order="BEFORE" >
+  		SELECT Account_seq.nextval AS user_id FROM DUAL
+  	</selectKey> -->
+    INSERT INTO ACCOUNT
+      (USER_ID, EMAIL, PASSWORD, NAME, GENDER, ADDRESS, PHONE, PROFILE, TYPE)
+    VALUES
+      (#{user_id} ,#{email}, #{password}, #{name}, #{gender} ,#{address}, #{phone}, #{profile}, #{type})
+  </insert>
+
+  <!--  
+  TODO MyBatis 3 does not map booleans to integers
+  <update id="updateProfile" parameterType="Account">
+    UPDATE PROFILE SET
+      LANGPREF = #{languagePreference},
+      FAVCATEGORY = #{favouriteCategoryId},
+      MYLISTOPT = #{listOption},
+      BANNEROPT = #{bannerOption}
+    WHERE USERID = #{username}
+  </update>
+  -->
+
+  <update id="updateProfile" parameterType="Account">
+    UPDATE PROFILE SET
+      LANGPREF = #{languagePreference},
+      FAVCATEGORY = #{favouriteCategoryId}
+    WHERE USERID = #{username}
+  </update>
+
+  <!--  
+  TODO MyBatis 3 does not map booleans to integers
+  <insert id="insertProfile" parameterType="Account">
+    INSERT INTO PROFILE (LANGPREF, FAVCATEGORY, MYLISTOPT, BANNEROPT, USERID)
+    VALUES (#{languagePreference}, #{favouriteCategoryId}, #{listOption}, #{bannerOption}, #{username})
+  </insert>
+  -->
+
+  <!-- <insert id="insertProfile" parameterType="Account">
+    INSERT INTO PROFILE (LANGPREF, FAVCATEGORY, USERID)
+    VALUES (#{languagePreference}, #{favouriteCategoryId}, #{username})
+  </insert> -->
+
+  <update id="updateSignon" parameterType="Account">
+    UPDATE SIGNON SET PASSWORD = #{password}
+    WHERE USER_ID = #{user_id}
+  </update>
+<update id="updateImageOfAccount" parameterType="Account">
+    UPDATE ACCOUNT SET
+      PROFILE = #{profile}
+    WHERE USER_ID = #{user_id}
+  </update>
+<update id="updateRestIDOfAccount" parameterType="Account">
+    UPDATE ACCOUNT SET
+      REST_ID = #{param1}
+    WHERE USER_ID = #{param2}
+  </update>
+  <!-- <insert id="insertSignon" parameterType="Account">
+    INSERT INTO SIGNON (PASSWORD,USERNAME)
+    VALUES (#{password}, #{username})
+  </insert>
+ -->
+ 
+ 
+</mapper>

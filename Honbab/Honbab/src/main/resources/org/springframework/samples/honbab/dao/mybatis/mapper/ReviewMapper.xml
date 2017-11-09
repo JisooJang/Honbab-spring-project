@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.springframework.samples.honbab.dao.mybatis.mapper.ReviewMapper">
+
+  <cache />
+  
+  <select id="searchReviewList" parameterType="int" resultType="Review">
+    select
+      review_id,
+      review_content,
+      review_img,
+      review_star,
+      user_id,
+      rest_id,
+      review_date
+    from review
+    where rest_id = #{rest_id}
+    order by review_date desc
+  </select>
+  
+  <insert id="insertReview" parameterType="Review">
+  	insert into review(review_id, REVIEW_CONTENT, review_star, user_id, rest_id, review_date)
+	VALUES (review_seq.nextval, #{review_content}, #{review_star}, #{user_id}, #{rest_id}, sysdate)
+  </insert>
+  
+  
+  <delete id="deleteReview" parameterType="int">
+	delete from review where review_id = #{review_id}
+	</delete>
+	
+	<select id="countReview" parameterType="int" resultType="int">
+   select count(*) from review where rest_id=#{rest_id}
+  </select>
+  
+  <select id="getReviewStar" parameterType="int" resultType="int">
+   select review_star from review where review_id = #{review_id}
+  </select>
+  
+  <select id="getTotalReviewStar" parameterType="int" resultType="String">
+   select sum(review_star) from review where rest_id = #{rest_id}
+  </select>
+</mapper>

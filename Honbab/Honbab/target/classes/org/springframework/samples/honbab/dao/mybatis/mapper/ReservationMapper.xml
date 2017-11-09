@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.springframework.samples.honbab.dao.mybatis.mapper.ReservationMapper">
+
+	<resultMap id="ResMap" type="Reservation">
+	<result property="reservation_id" column="RESERVATION_ID" jdbcType="NUMERIC"/>
+    <result property="rest_id" column="REST_ID" jdbcType="NUMERIC"/>
+    <result property="numOfPeople" column="NUMOFPEOPLE" jdbcType="NUMERIC" />   
+	</resultMap>
+
+	<select id="get_reservation_list" parameterType="String" resultMap="ResMap" 
+	resultType="Reservation">
+	SELECT RESERVATION_ID, REST_ID, NUMOFPEOPLE, VISIT_DATE, VISIT_TIME, USER_ID, NAME, PHONE, REQUESTED  
+	FROM RESERVATION
+	WHERE USER_ID = #{user_id}
+	</select>
+	
+	<select id="get_reservation_list_by_restaurant" parameterType="int" resultMap="ResMap"
+	resultType="Reservation">
+	SELECT RESERVATION_ID, REST_ID, NUMOFPEOPLE, VISIT_DATE, VISIT_TIME, USER_ID, NAME, PHONE, REQUESTED 
+	FROM RESERVATION
+	WHERE REST_ID = #{rest_id}
+	</select>
+		
+	<select id="get_reservation" parameterType="int" resultMap="ResMap"
+	resultType="Reservation">
+	SELECT RESERVATION_ID, REST_ID, NUMOFPEOPLE, VISIT_DATE, VISIT_TIME, USER_ID, NAME, PHONE, REQUESTED 
+	FROM RESERVATION
+	WHERE RESERVATION_ID = #{reservation_id}
+	</select>
+	
+	<select id="getRest_id_list_in_reservation"
+	resultType="java.lang.Integer">
+	SELECT UNIQUE rest_id
+	FROM RESERVATION
+	</select>
+	
+	<select id="get_rest_count" parameterType="int"
+	resultType="int">
+	SELECT count(*)
+	FROM RESERVATION
+	WHERE REST_ID = #{rest_id}
+	</select>
+	
+	<insert id="insertReservation" parameterType="Reservation">
+	 <!-- <selectKey keyProperty="reservation_id" resultType="int" order="BEFORE">
+	 SELECT RES_SEQ.nextval FROM dual
+	 </selectKey> -->
+	INSERT INTO RESERVATION (RESERVATION_ID, REST_ID, NUMOFPEOPLE, VISIT_DATE, VISIT_TIME, USER_ID, NAME, PHONE, REQUESTED)
+	VALUES (RES_SEQ.nextval, #{rest_id}, #{numOfPeople}, #{visit_date},
+	 #{visit_time}, #{user_id}, #{name}, #{phone}, #{requested})
+	</insert>
+	
+	
+	<delete id="deleteReservation" parameterType="int">
+	DELETE FROM RESERVATION
+	WHERE RESERVATION_ID = #{reservation_id}
+	</delete>
+	
+	
+	
+	<!--  public void updateReservation(String reservation_id, Reservation reservation); -->
+	<update id="updateReservation"
+	parameterType="Reservation">
+	UPDATE RESERVATION SET
+	NUMOFPEOPLE = #{numOfPeople},
+	VISIT_DATE = #{visit_date},
+	VISIT_TIME = #{visit_time},
+	NAME = #{name},
+	PHONE = #{phone},
+	REQUESTED = #{requested}
+	WHERE RESERVATION_ID = #{reservation_id}
+	</update>
+	
+</mapper>
+	
+
